@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080b16">
 
-<title>AudioHub - Vishu raj</title>
+<title>AudioHub</title>
 
 <style>
 *{
@@ -19,120 +19,210 @@ body{
   background:#080b16;
   color:#fff;
   min-height:100vh;
-  padding-bottom:110px;
+  padding-bottom:90px;
 }
 
 header{
   padding:22px 18px 18px;
   background:linear-gradient(135deg,#10162d,#17102b);
+  border-bottom:1px solid #292945;
   position:sticky;
   top:0;
-  z-index:10;
-  border-bottom:1px solid #292945;
+  z-index:20;
 }
 
 .brand{
-  font-size:27px;
+  font-size:28px;
   font-weight:800;
-  background:linear-gradient(90deg,#7c5cff,#35a7ff);
+  background:linear-gradient(90deg,#8065ff,#36a8ff);
   -webkit-background-clip:text;
   color:transparent;
 }
 
 .creator{
-  color:#8991aa;
+  color:#858da7;
   font-size:12px;
   margin-top:4px;
 }
 
+.page{
+  padding:22px 17px;
+}
+
 .hero{
-  padding:28px 18px 18px;
+  padding:10px 2px 22px;
 }
 
 .hero h1{
   font-size:30px;
-  line-height:1.15;
-  margin-bottom:10px;
+  margin-bottom:9px;
 }
 
 .hero p{
-  color:#9299b1;
+  color:#8b93aa;
+  font-size:14px;
   line-height:1.5;
 }
 
 .search{
-  margin:20px 18px;
+  margin-bottom:22px;
 }
 
 .search input{
   width:100%;
-  padding:15px 18px;
+  padding:15px 17px;
   border-radius:15px;
-  border:1px solid #292f4b;
+  border:1px solid #292f49;
   background:#111629;
   color:white;
-  font-size:15px;
   outline:none;
+  font-size:14px;
 }
 
 .search input:focus{
-  border-color:#7057ff;
-}
-
-.section{
-  padding:10px 18px 20px;
+  border-color:#735dff;
 }
 
 .section-title{
-  font-size:20px;
+  font-size:19px;
   font-weight:700;
-  margin:18px 0 14px;
+  margin-bottom:14px;
 }
 
-.playlist{
-  background:#111629;
-  border:1px solid #252b45;
-  border-radius:18px;
-  padding:15px;
-  margin-bottom:16px;
-}
-
-.playlist-top{
+.playlists{
   display:flex;
-  gap:14px;
-  align-items:center;
-  margin-bottom:12px;
+  flex-direction:column;
+  gap:13px;
 }
 
-.cover{
-  width:65px;
-  height:65px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#7057ff,#1997ff);
+.playlist-card{
+  width:100%;
+  border:1px solid #292f49;
+  background:linear-gradient(145deg,#12182b,#0e1323);
+  border-radius:20px;
+  padding:17px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  text-align:left;
+  color:white;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.playlist-card:active{
+  transform:scale(.98);
+}
+
+.playlist-icon{
+  width:64px;
+  height:64px;
+  flex-shrink:0;
+  border-radius:17px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:28px;
+  font-size:29px;
+  background:linear-gradient(135deg,#725aff,#269cff);
 }
 
-.playlist h3{
-  font-size:18px;
+.playlist-info{
+  flex:1;
+  min-width:0;
+}
+
+.playlist-name{
+  font-size:17px;
+  font-weight:700;
   margin-bottom:5px;
 }
 
-.playlist p{
-  color:#858ca4;
-  font-size:13px;
+.playlist-desc{
+  color:#8189a2;
+  font-size:12px;
+  line-height:1.4;
+}
+
+.arrow{
+  color:#707994;
+  font-size:23px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* PLAYLIST PAGE */
+
+.playlist-page{
+  display:none;
+}
+
+.back{
+  border:0;
+  background:#171d32;
+  color:#fff;
+  border:1px solid #2a3150;
+  border-radius:12px;
+  padding:10px 14px;
+  margin-bottom:20px;
+  cursor:pointer;
+}
+
+.playlist-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.big-icon{
+  width:70px;
+  height:70px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  background:linear-gradient(135deg,#725aff,#269cff);
+}
+
+.playlist-header h2{
+  font-size:24px;
+  margin-bottom:5px;
+}
+
+.playlist-header p{
+  color:#858da6;
+  font-size:12px;
+}
+
+.tracks{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
 .track{
-  margin-top:12px;
+  background:#111629;
+  border:1px solid #252b45;
+  border-radius:16px;
   padding:12px;
-  background:#0b0f1e;
-  border-radius:13px;
   display:flex;
   align-items:center;
   gap:11px;
+}
+
+.play-btn{
+  width:43px;
+  height:43px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#765cff,#329eff);
+  color:white;
+  cursor:pointer;
+  font-size:15px;
+  flex-shrink:0;
 }
 
 .track-info{
@@ -142,7 +232,7 @@ header{
 
 .track-title{
   font-size:14px;
-  font-weight:600;
+  font-weight:700;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -150,71 +240,64 @@ header{
 
 .track-artist{
   color:#777f99;
-  font-size:12px;
+  font-size:11px;
   margin-top:4px;
 }
 
-.play{
-  width:42px;
-  height:42px;
-  border:none;
-  border-radius:50%;
-  background:linear-gradient(135deg,#765cff,#319cff);
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.favorite{
+.fav{
+  background:#191f33;
+  color:#8189a0;
   width:38px;
   height:38px;
-  border:none;
+  border:0;
   border-radius:50%;
-  background:#191e32;
-  color:#aaa;
   font-size:17px;
   cursor:pointer;
 }
 
-.favorite.active{
-  color:#ff5c91;
+.fav.active{
+  color:#ff5b91;
 }
 
 .empty{
   text-align:center;
+  padding:40px 15px;
   color:#777f99;
-  padding:30px 10px;
-  display:none;
+  background:#111629;
+  border:1px solid #252b45;
+  border-radius:16px;
 }
+
+/* PLAYER */
 
 .player{
   position:fixed;
   left:10px;
   right:10px;
   bottom:72px;
-  z-index:20;
   background:#151a2d;
   border:1px solid #303653;
   border-radius:18px;
   padding:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.45);
+  z-index:30;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
 }
 
 .now{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-bottom:8px;
+  margin-bottom:7px;
 }
 
-.now-cover{
+.now-icon{
   width:42px;
   height:42px;
   border-radius:10px;
-  background:linear-gradient(135deg,#7057ff,#1997ff);
   display:flex;
   align-items:center;
   justify-content:center;
+  background:linear-gradient(135deg,#725aff,#269cff);
 }
 
 .now-info{
@@ -225,14 +308,14 @@ header{
 .now-title{
   font-size:13px;
   font-weight:700;
-  white-space:nowrap;
   overflow:hidden;
+  white-space:nowrap;
   text-overflow:ellipsis;
 }
 
 .now-artist{
-  color:#777f99;
   font-size:11px;
+  color:#777f99;
   margin-top:3px;
 }
 
@@ -241,30 +324,32 @@ audio{
   height:38px;
 }
 
+/* NAV */
+
 nav{
   position:fixed;
+  bottom:0;
   left:0;
   right:0;
-  bottom:0;
-  z-index:30;
   height:65px;
   background:#0d1120;
   border-top:1px solid #282e48;
+  z-index:40;
   display:flex;
   justify-content:space-around;
   align-items:center;
 }
 
 nav button{
+  border:0;
   background:none;
-  border:none;
-  color:#737b94;
+  color:#747c95;
   font-size:11px;
   cursor:pointer;
 }
 
 nav button.active{
-  color:#7d68ff;
+  color:#8068ff;
 }
 
 .nav-icon{
@@ -273,23 +358,19 @@ nav button.active{
   margin-bottom:3px;
 }
 
-.about{
-  margin-top:5px;
-}
-
 .toast{
   position:fixed;
-  top:20px;
+  top:18px;
   left:50%;
   transform:translateX(-50%) translateY(-80px);
   background:#1b2340;
   border:1px solid #39446b;
   color:white;
-  padding:12px 18px;
+  padding:11px 16px;
   border-radius:12px;
   z-index:100;
   transition:.3s;
-  font-size:13px;
+  font-size:12px;
 }
 
 .toast.show{
@@ -305,103 +386,202 @@ nav button.active{
   <div class="creator">Created by Vishu raj</div>
 </header>
 
-<section class="hero">
-  <h1>Your Audio, Your Playlist.</h1>
-  <p>Listen to your favourite audio in one simple place.</p>
-</section>
 
-<div class="search">
-  <input
-    id="searchInput"
-    type="search"
-    placeholder="Search audio..."
-    oninput="searchTracks()"
-  >
-</div>
+<!-- HOME PAGE -->
 
-<main class="section">
+<main id="homePage" class="page">
 
-  <div class="section-title">🎵 Playlists</div>
+  <section class="hero">
+    <h1>Listen. Learn. Grow.</h1>
+    <p>
+      Explore your playlists and enjoy your audio in one place.
+    </p>
+  </section>
 
-  <div class="playlist">
-
-    <div class="playlist-top">
-      <div class="cover">🎧</div>
-
-      <div>
-        <h3>Study</h3>
-        <p>Study and learning audio playlist</p>
-      </div>
-    </div>
-
-    <!-- TRACK 1 -->
-    <div
-      class="track"
-      data-search="Parvati Sadhu Tiwari Study Audio"
+  <div class="search">
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search playlists..."
+      oninput="searchPlaylists()"
     >
-
-      <button
-        class="play"
-        onclick="playTrack(0)"
-      >▶</button>
-
-      <div class="track-info">
-        <div class="track-title">
-          Parvati Sadhu Tiwari
-        </div>
-
-        <div class="track-artist">
-          Study Audio
-        </div>
-      </div>
-
-      <button
-        class="favorite"
-        onclick="toggleFavorite(0,this)"
-      >♡</button>
-
-    </div>
-
-    <div id="emptySearch" class="empty">
-      No audio found.
-    </div>
-
   </div>
 
-  <div class="section-title">ℹ️ About</div>
+  <div class="section-title">
+    Your Playlists
+  </div>
 
-  <div class="playlist about">
-    <h3>AudioHub</h3>
+  <div class="playlists" id="playlistCards">
 
-    <p style="margin-top:8px;line-height:1.6;">
-      A personal audio playlist platform created by Vishu raj.
-    </p>
+    <!-- OSHO -->
+
+    <button
+      class="playlist-card"
+      data-search="osho wisdom awareness"
+      onclick="openPlaylist('osho')"
+    >
+
+      <div class="playlist-icon">🧘</div>
+
+      <div class="playlist-info">
+        <div class="playlist-name">
+          Osho
+        </div>
+
+        <div class="playlist-desc">
+          Wisdom, awareness & inner growth
+        </div>
+      </div>
+
+      <div class="arrow">›</div>
+
+    </button>
+
+
+    <!-- PREMANAND JI -->
+
+    <button
+      class="playlist-card"
+      data-search="premanand ji spiritual devotional"
+      onclick="openPlaylist('premanand')"
+    >
+
+      <div class="playlist-icon">🙏</div>
+
+      <div class="playlist-info">
+        <div class="playlist-name">
+          Premanand Ji
+        </div>
+
+        <div class="playlist-desc">
+          Spiritual talks & devotional wisdom
+        </div>
+      </div>
+
+      <div class="arrow">›</div>
+
+    </button>
+
+
+    <!-- STUDY -->
+
+    <button
+      class="playlist-card"
+      data-search="study time learning focus"
+      onclick="openPlaylist('study')"
+    >
+
+      <div class="playlist-icon">📚</div>
+
+      <div class="playlist-info">
+        <div class="playlist-name">
+          Study Time
+        </div>
+
+        <div class="playlist-desc">
+          Focus, learning & study sessions
+        </div>
+      </div>
+
+      <div class="arrow">›</div>
+
+    </button>
+
+
+    <!-- MOTIVATIONAL -->
+
+    <button
+      class="playlist-card"
+      data-search="motivational motivation growth"
+      onclick="openPlaylist('motivational')"
+    >
+
+      <div class="playlist-icon">🚀</div>
+
+      <div class="playlist-info">
+        <div class="playlist-name">
+          Motivational
+        </div>
+
+        <div class="playlist-desc">
+          Motivation, discipline & personal growth
+        </div>
+      </div>
+
+      <div class="arrow">›</div>
+
+    </button>
+
   </div>
 
 </main>
 
+
+
+<!-- PLAYLIST PAGE -->
+
+<main id="playlistPage" class="page playlist-page">
+
+  <button
+    class="back"
+    onclick="goHome()"
+  >
+    ← Back
+  </button>
+
+  <div class="playlist-header">
+
+    <div
+      class="big-icon"
+      id="playlistIcon"
+    >
+      🎵
+    </div>
+
+    <div>
+      <h2 id="playlistTitle">
+        Playlist
+      </h2>
+
+      <p id="playlistDescription">
+        Your playlist
+      </p>
+    </div>
+
+  </div>
+
+
+  <div
+    id="trackList"
+    class="tracks"
+  ></div>
+
+</main>
+
+
+
 <!-- AUDIO PLAYER -->
 
-<div class="player" id="player">
+<div class="player">
 
   <div class="now">
 
-    <div class="now-cover">
+    <div class="now-icon">
       🎵
     </div>
 
     <div class="now-info">
 
       <div
-        class="now-title"
         id="nowTitle"
+        class="now-title"
       >
         Select an audio
       </div>
 
       <div
-        class="now-artist"
         id="nowArtist"
+        class="now-artist"
       >
         AudioHub
       </div>
@@ -418,20 +598,22 @@ nav button.active{
 
 </div>
 
+
+
 <!-- BOTTOM NAV -->
 
 <nav>
 
   <button
     class="active"
-    onclick="showHome()"
+    onclick="goHome()"
   >
     <span class="nav-icon">⌂</span>
     Home
   </button>
 
   <button
-    onclick="scrollToPlaylist()"
+    onclick="goHome()"
   >
     <span class="nav-icon">☷</span>
     Playlists
@@ -445,7 +627,7 @@ nav button.active{
   </button>
 
   <button
-    onclick="showAbout()"
+    onclick="showToast('More features coming soon')"
   >
     <span class="nav-icon">⋯</span>
     More
@@ -453,32 +635,92 @@ nav button.active{
 
 </nav>
 
-<div
-  class="toast"
-  id="toast"
-></div>
+
+<div id="toast" class="toast"></div>
+
+
 
 <script>
 
 /* =========================================
-   AUDIO CONFIGURATION
+   PLAYLIST DATA
    ========================================= */
 
-const tracks = [
+const playlists = {
 
-  {
-    title: "Parvati Sadhu Tiwari",
-    artist: "Study Audio",
+  osho: {
+    title: "Osho",
+    icon: "🧘",
+    description: "Wisdom, awareness & inner growth",
 
-    url: "https://lnhsuztjmteqrztvcigs.supabase.co/storage/v1/object/public/Audio/Parvati%20%20%20Sadhu%20Tiwari.m4a"
+    tracks: []
+
+  },
+
+
+  premanand: {
+    title: "Premanand Ji",
+    icon: "🙏",
+    description: "Spiritual talks & devotional wisdom",
+
+    tracks: []
+
+  },
+
+
+  study: {
+    title: "Study Time",
+    icon: "📚",
+    description: "Focus, learning & study sessions",
+
+    tracks: [
+
+      {
+        title: "Parvati Sadhu Tiwari",
+        artist: "Study Audio",
+
+        url: "https://lnhsuztjmteqrztvcigs.supabase.co/storage/v1/object/public/Audio/Parvati%20%20%20Sadhu%20Tiwari.m4a"
+      }
+
+    ]
+
+  },
+
+
+  motivational: {
+    title: "Motivational",
+    icon: "🚀",
+    description: "Motivation, discipline & personal growth",
+
+    tracks: []
+
   }
 
-];
+};
+
 
 
 /* =========================================
-   PLAYER
+   ELEMENTS
    ========================================= */
+
+const homePage =
+  document.getElementById("homePage");
+
+const playlistPage =
+  document.getElementById("playlistPage");
+
+const trackList =
+  document.getElementById("trackList");
+
+const playlistTitle =
+  document.getElementById("playlistTitle");
+
+const playlistDescription =
+  document.getElementById("playlistDescription");
+
+const playlistIcon =
+  document.getElementById("playlistIcon");
 
 const audioPlayer =
   document.getElementById("audioPlayer");
@@ -490,9 +732,133 @@ const nowArtist =
   document.getElementById("nowArtist");
 
 
+
+/* =========================================
+   OPEN PLAYLIST
+   ========================================= */
+
+function openPlaylist(id){
+
+  const playlist =
+    playlists[id];
+
+  if(!playlist){
+    return;
+  }
+
+  homePage.style.display = "none";
+
+  playlistPage.style.display = "block";
+
+  playlistTitle.textContent =
+    playlist.title;
+
+  playlistDescription.textContent =
+    playlist.description;
+
+  playlistIcon.textContent =
+    playlist.icon;
+
+  renderTracks(
+    playlist.tracks
+  );
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+
+
+/* =========================================
+   RENDER TRACKS
+   ========================================= */
+
+function renderTracks(tracks){
+
+  trackList.innerHTML = "";
+
+  if(tracks.length === 0){
+
+    trackList.innerHTML = `
+      <div class="empty">
+        <div style="font-size:32px;margin-bottom:10px;">
+          🎵
+        </div>
+
+        No audio added yet.
+
+        <div style="font-size:11px;margin-top:7px;">
+          Audio will appear here when added to this playlist.
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  tracks.forEach(function(track,index){
+
+    const div =
+      document.createElement("div");
+
+    div.className = "track";
+
+    div.innerHTML = `
+
+      <button
+        class="play-btn"
+        onclick="playTrack(${index})"
+      >
+        ▶
+      </button>
+
+      <div class="track-info">
+
+        <div class="track-title">
+          ${escapeHTML(track.title)}
+        </div>
+
+        <div class="track-artist">
+          ${escapeHTML(track.artist)}
+        </div>
+
+      </div>
+
+      <button
+        class="fav"
+        onclick="toggleFavorite('${escapeHTML(track.title)}',this)"
+      >
+        ♡
+      </button>
+
+    `;
+
+    trackList.appendChild(div);
+
+  });
+
+}
+
+
+
+/* =========================================
+   CURRENT PLAYLIST
+   ========================================= */
+
+let currentTracks = [];
+
 function playTrack(index){
 
-  const track = tracks[index];
+  const tracks =
+    currentTracks.length
+      ? currentTracks
+      : getCurrentTracks();
+
+  const track =
+    tracks[index];
 
   if(!track){
     return;
@@ -508,15 +874,10 @@ function playTrack(index){
     track.url;
 
   audioPlayer.play()
-    .catch(function(error){
-
-      console.log(
-        "Playback requires user interaction:",
-        error
-      );
+    .catch(function(){
 
       showToast(
-        "Press Play to start the audio"
+        "Press ▶ to start audio"
       );
 
     });
@@ -525,43 +886,86 @@ function playTrack(index){
     "lastPlayed",
     JSON.stringify(track)
   );
+
 }
+
+
+
+/* =========================================
+   TRACK LIST CONNECTION
+   ========================================= */
+
+function getCurrentTracks(){
+
+  const title =
+    playlistTitle.textContent;
+
+  for(const key in playlists){
+
+    if(
+      playlists[key].title === title
+    ){
+
+      currentTracks =
+        playlists[key].tracks;
+
+      return currentTracks;
+
+    }
+
+  }
+
+  return [];
+
+}
+
+
+
+/* =========================================
+   UPDATE CURRENT TRACKS
+   ========================================= */
+
+const originalOpenPlaylist =
+  openPlaylist;
 
 
 /* =========================================
    FAVORITES
    ========================================= */
 
-function toggleFavorite(index,button){
+function toggleFavorite(title,button){
 
   let favorites =
     JSON.parse(
       localStorage.getItem("favorites") || "[]"
     );
 
-  const exists =
-    favorites.includes(index);
-
-  if(exists){
+  if(favorites.includes(title)){
 
     favorites =
-      favorites.filter(function(item){
-        return item !== index;
-      });
+      favorites.filter(
+        item => item !== title
+      );
 
     button.classList.remove("active");
+
     button.textContent = "♡";
 
-    showToast("Removed from favorites");
+    showToast(
+      "Removed from favorites"
+    );
 
   }else{
 
-    favorites.push(index);
+    favorites.push(title);
 
     button.classList.add("active");
+
     button.textContent = "♥";
 
-    showToast("Added to favorites");
+    showToast(
+      "Added to favorites"
+    );
 
   }
 
@@ -569,14 +973,16 @@ function toggleFavorite(index,button){
     "favorites",
     JSON.stringify(favorites)
   );
+
 }
 
 
+
 /* =========================================
-   SEARCH
+   SEARCH PLAYLISTS
    ========================================= */
 
-function searchTracks(){
+function searchPlaylists(){
 
   const query =
     document
@@ -585,39 +991,49 @@ function searchTracks(){
       .toLowerCase()
       .trim();
 
-  const track =
-    document.querySelector(".track");
+  const cards =
+    document.querySelectorAll(
+      ".playlist-card"
+    );
 
-  const text =
-    track
-      .getAttribute("data-search")
-      .toLowerCase();
+  cards.forEach(function(card){
 
-  if(text.includes(query)){
+    const text =
+      card
+        .getAttribute("data-search")
+        .toLowerCase();
 
-    track.style.display = "flex";
+    if(text.includes(query)){
 
-    document.getElementById(
-      "emptySearch"
-    ).style.display = "none";
+      card.classList.remove(
+        "hidden"
+      );
 
-  }else{
+    }else{
 
-    track.style.display = "none";
+      card.classList.add(
+        "hidden"
+      );
 
-    document.getElementById(
-      "emptySearch"
-    ).style.display = "block";
+    }
 
-  }
+  });
+
 }
 
 
+
 /* =========================================
-   NAVIGATION
+   HOME
    ========================================= */
 
-function showHome(){
+function goHome(){
+
+  playlistPage.style.display =
+    "none";
+
+  homePage.style.display =
+    "block";
 
   window.scrollTo({
     top:0,
@@ -627,28 +1043,24 @@ function showHome(){
 }
 
 
-function scrollToPlaylist(){
 
-  document.querySelector(
-    ".playlist"
-  ).scrollIntoView({
-    behavior:"smooth"
-  });
-
-}
-
+/* =========================================
+   FAVORITES BUTTON
+   ========================================= */
 
 function showFavorites(){
 
   const favorites =
     JSON.parse(
-      localStorage.getItem("favorites") || "[]"
+      localStorage.getItem(
+        "favorites"
+      ) || "[]"
     );
 
   if(favorites.length === 0){
 
     showToast(
-      "No favorite audio yet"
+      "No favorites yet"
     );
 
     return;
@@ -656,21 +1068,11 @@ function showFavorites(){
 
   showToast(
     favorites.length +
-    " favorite audio saved"
+    " favorite(s) saved"
   );
 
 }
 
-
-function showAbout(){
-
-  document.querySelector(
-    ".about"
-  ).scrollIntoView({
-    behavior:"smooth"
-  });
-
-}
 
 
 /* =========================================
@@ -680,58 +1082,64 @@ function showAbout(){
 function showToast(message){
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
   toast.textContent =
     message;
 
-  toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
   setTimeout(function(){
 
-    toast.classList.remove("show");
+    toast.classList.remove(
+      "show"
+    );
 
   },2000);
 
 }
 
 
+
 /* =========================================
-   RESTORE LAST PLAYED
+   HTML SAFETY
    ========================================= */
 
-window.addEventListener(
-  "load",
-  function(){
+function escapeHTML(text){
 
-    const lastPlayed =
-      localStorage.getItem(
-        "lastPlayed"
-      );
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
-    if(lastPlayed){
+}
 
-      try{
 
-        const track =
-          JSON.parse(lastPlayed);
 
-        nowTitle.textContent =
-          track.title;
+/* =========================================
+   FIX PLAYLIST TRACK CONNECTION
+   ========================================= */
 
-        nowArtist.textContent =
-          track.artist;
+const oldOpenPlaylist =
+  window.openPlaylist;
 
-      }catch(error){
+window.openPlaylist =
+  function(id){
 
-        console.log(error);
+    currentTracks =
+      playlists[id]
+        ? playlists[id].tracks
+        : [];
 
-      }
+    oldOpenPlaylist(id);
 
-    }
-
-  }
-);
+  };
 
 </script>
 
