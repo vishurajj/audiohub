@@ -2,1146 +2,1448 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#080b16">
-
 <title>AudioHub</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:Arial,sans-serif;
-  background:#080b16;
-  color:#fff;
-  min-height:100vh;
-  padding-bottom:90px;
+font-family:Inter,Arial,sans-serif;
+background:#070914;
+color:#fff;
+min-height:100vh;
+padding-bottom:86px
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.app{max-width:920px;margin:auto}
+
+.header{
+padding:28px 20px;
+background:linear-gradient(135deg,#17142f,#11152b);
+border-bottom:1px solid #252a43
+}
+.logo{
+font-size:39px;
+font-weight:800;
+background:linear-gradient(90deg,#8e6bff,#5d96ff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent
+}
+.creator{color:#858ca7;margin-top:6px}
+
+main{padding:20px 18px 125px}
+.section-title{font-size:28px;margin:20px 0 17px}
+
+.search{
+width:100%;
+padding:14px 17px;
+border:1px solid #282e49;
+border-radius:15px;
+background:#111527;
+color:#fff;
+outline:0;
+margin-bottom:20px
+}
+.search:focus{border-color:#735dff}
+
+.tabs{display:flex;gap:12px;margin-bottom:25px}
+.tab{
+padding:12px 23px;
+border-radius:30px;
+border:1px solid #292e4b;
+background:#111527;
+color:#8991ad
+}
+.tab.active{
+background:#2a2055;
+border-color:#765cff;
+color:#fff
 }
 
-header{
-  padding:22px 18px 18px;
-  background:linear-gradient(135deg,#10162d,#17102b);
-  border-bottom:1px solid #292945;
-  position:sticky;
-  top:0;
-  z-index:20;
+.card{
+background:#111527;
+border:1px solid #252b45;
+border-radius:18px;
+padding:17px;
+margin-bottom:12px
 }
 
-.brand{
-  font-size:28px;
-  font-weight:800;
-  background:linear-gradient(90deg,#8065ff,#36a8ff);
-  -webkit-background-clip:text;
-  color:transparent;
+.playlist{
+display:flex;
+align-items:center;
+gap:15px;
+cursor:pointer;
+transition:.2s
 }
-
-.creator{
-  color:#858da7;
-  font-size:12px;
-  margin-top:4px;
+.playlist:hover{border-color:#6958db}
+.play-icon{
+width:52px;
+height:52px;
+border-radius:15px;
+display:grid;
+place-items:center;
+background:#241d48;
+color:#9b86ff;
+font-size:25px;
+flex:none
 }
+.info{flex:1}
+.name{font-size:18px;font-weight:700}
+.desc{font-size:13px;color:#7f87a3;margin-top:5px}
+.arrow{font-size:28px;color:#747c99}
 
-.page{
-  padding:22px 17px;
+.btn{
+border:1px solid #2d3453;
+background:#151a2c;
+color:#fff;
+padding:10px 14px;
+border-radius:11px
+}
+.btn.primary{
+background:#735cff;
+border-color:#735cff
+}
+.btn.danger{
+background:#321923;
+border-color:#693244;
+color:#ff9eb1
+}
+.btn.wide{width:100%}
+
+.track{
+display:flex;
+align-items:center;
+gap:13px
+}
+.track-info{flex:1}
+.track-title{font-weight:700}
+.track-sub{font-size:12px;color:#7d86a4;margin-top:4px}
+
+.actions{
+display:flex;
+gap:7px;
+margin-top:12px;
+flex-wrap:wrap
+}
+.icon-btn{
+width:39px;
+height:39px;
+border-radius:11px;
+border:1px solid #2b3150;
+background:#151a2c;
+color:#aab1c8
+}
+.icon-btn.active{
+color:#ff7d9c;
+border-color:#7b3c52
 }
 
 .hero{
-  padding:10px 2px 22px;
+padding:25px;
+border:1px solid #282e49;
+border-radius:20px;
+background:linear-gradient(135deg,#15142e,#101528);
+margin-bottom:20px
 }
-
-.hero h1{
-  font-size:30px;
-  margin-bottom:9px;
+.hero-icon{
+font-size:42px;
+color:#907cff;
+margin-bottom:10px
 }
-
-.hero p{
-  color:#8b93aa;
-  font-size:14px;
-  line-height:1.5;
-}
-
-.search{
-  margin-bottom:22px;
-}
-
-.search input{
-  width:100%;
-  padding:15px 17px;
-  border-radius:15px;
-  border:1px solid #292f49;
-  background:#111629;
-  color:white;
-  outline:none;
-  font-size:14px;
-}
-
-.search input:focus{
-  border-color:#735dff;
-}
-
-.section-title{
-  font-size:19px;
-  font-weight:700;
-  margin-bottom:14px;
-}
-
-.playlists{
-  display:flex;
-  flex-direction:column;
-  gap:13px;
-}
-
-.playlist-card{
-  width:100%;
-  border:1px solid #292f49;
-  background:linear-gradient(145deg,#12182b,#0e1323);
-  border-radius:20px;
-  padding:17px;
-  display:flex;
-  align-items:center;
-  gap:15px;
-  text-align:left;
-  color:white;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.playlist-card:active{
-  transform:scale(.98);
-}
-
-.playlist-icon{
-  width:64px;
-  height:64px;
-  flex-shrink:0;
-  border-radius:17px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:29px;
-  background:linear-gradient(135deg,#725aff,#269cff);
-}
-
-.playlist-info{
-  flex:1;
-  min-width:0;
-}
-
-.playlist-name{
-  font-size:17px;
-  font-weight:700;
-  margin-bottom:5px;
-}
-
-.playlist-desc{
-  color:#8189a2;
-  font-size:12px;
-  line-height:1.4;
-}
-
-.arrow{
-  color:#707994;
-  font-size:23px;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* PLAYLIST PAGE */
-
-.playlist-page{
-  display:none;
-}
-
-.back{
-  border:0;
-  background:#171d32;
-  color:#fff;
-  border:1px solid #2a3150;
-  border-radius:12px;
-  padding:10px 14px;
-  margin-bottom:20px;
-  cursor:pointer;
-}
-
-.playlist-header{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:20px;
-}
-
-.big-icon{
-  width:70px;
-  height:70px;
-  border-radius:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:32px;
-  background:linear-gradient(135deg,#725aff,#269cff);
-}
-
-.playlist-header h2{
-  font-size:24px;
-  margin-bottom:5px;
-}
-
-.playlist-header p{
-  color:#858da6;
-  font-size:12px;
-}
-
-.tracks{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.track{
-  background:#111629;
-  border:1px solid #252b45;
-  border-radius:16px;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-
-.play-btn{
-  width:43px;
-  height:43px;
-  border:0;
-  border-radius:50%;
-  background:linear-gradient(135deg,#765cff,#329eff);
-  color:white;
-  cursor:pointer;
-  font-size:15px;
-  flex-shrink:0;
-}
-
-.track-info{
-  flex:1;
-  min-width:0;
-}
-
-.track-title{
-  font-size:14px;
-  font-weight:700;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.track-artist{
-  color:#777f99;
-  font-size:11px;
-  margin-top:4px;
-}
-
-.fav{
-  background:#191f33;
-  color:#8189a0;
-  width:38px;
-  height:38px;
-  border:0;
-  border-radius:50%;
-  font-size:17px;
-  cursor:pointer;
-}
-
-.fav.active{
-  color:#ff5b91;
-}
+.hero h1{font-size:29px}
+.hero p{color:#8089a5;margin-top:6px}
 
 .empty{
-  text-align:center;
-  padding:40px 15px;
-  color:#777f99;
-  background:#111629;
-  border:1px solid #252b45;
-  border-radius:16px;
+text-align:center;
+padding:55px 20px;
+color:#7d86a4
 }
 
-/* PLAYER */
+.post{
+background:#111527;
+border:1px solid #252b45;
+border-radius:18px;
+padding:17px;
+margin-bottom:13px
+}
+.post-title{font-size:18px;font-weight:700}
+.post-meta{font-size:12px;color:#737c99;margin-top:5px}
+.post-desc{font-size:14px;color:#a4abc0;margin-top:10px;line-height:1.5}
 
-.player{
-  position:fixed;
-  left:10px;
-  right:10px;
-  bottom:72px;
-  background:#151a2d;
-  border:1px solid #303653;
-  border-radius:18px;
-  padding:12px;
-  z-index:30;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+.audio-wrap{
+position:fixed;
+left:0;
+right:0;
+bottom:72px;
+z-index:50;
+display:none;
+padding:10px;
+background:#101426;
+border-top:1px solid #292f49
+}
+.audio-wrap.show{display:block}
+.audio-inner{
+max-width:920px;
+margin:auto;
+display:flex;
+gap:10px;
+align-items:center
+}
+.audio-title{
+font-size:12px;
+color:#a8afc6;
+width:120px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
+}
+audio{flex:1;height:40px}
+
+.nav{
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+height:72px;
+z-index:60;
+background:#0d1020;
+border-top:1px solid #252a43;
+display:flex;
+justify-content:center
+}
+.nav button{
+width:25%;
+max-width:180px;
+border:0;
+background:none;
+color:#68718f;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:4px
+}
+.nav button.active{color:#8c78ff}
+.nav-icon{font-size:26px;line-height:1}
+.nav-label{font-size:12px}
+
+.modal{
+position:fixed;
+inset:0;
+z-index:100;
+background:rgba(0,0,0,.72);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:18px
+}
+.modal-box{
+width:min(560px,100%);
+max-height:90vh;
+overflow:auto;
+background:#111527;
+border:1px solid #2a3150;
+border-radius:20px;
+padding:20px
+}
+.modal-box h2{margin-bottom:18px}
+
+.input,.textarea,.select{
+width:100%;
+padding:13px;
+border-radius:11px;
+border:1px solid #2b3150;
+background:#0b0f1d;
+color:#fff;
+outline:none;
+margin-bottom:11px
+}
+.textarea{min-height:100px;resize:vertical}
+.input:focus,.textarea:focus,.select:focus{border-color:#735cff}
+
+.form-label{
+font-size:12px;
+color:#8a93ad;
+margin:4px 0 6px;
+display:block
 }
 
-.now{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:7px;
+.row{
+display:flex;
+gap:9px
+}
+.row>*{flex:1}
+
+.muted{color:#78819d}
+.small{font-size:12px}
+
+.comment{
+padding:11px 0;
+border-bottom:1px solid #242a43
+}
+.comment strong{font-size:13px}
+.comment p{
+font-size:13px;
+color:#a4abc0;
+margin-top:4px
 }
 
-.now-icon{
-  width:42px;
-  height:42px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#725aff,#269cff);
+.site-footer{
+text-align:center;
+padding:30px 18px 22px;
+margin-top:28px;
+border-top:1px solid #252b45;
+color:#7e86a1
+}
+.footer-brand{
+font-size:18px;
+font-weight:700;
+color:#c7cce0
+}
+.footer-tagline{
+font-size:13px;
+margin-top:6px
+}
+.footer-name{
+font-size:16px;
+font-weight:700;
+color:#8f7bff;
+margin-top:14px;
+letter-spacing:.5px
+}
+.footer-copy{
+font-size:12px;
+margin-top:7px
+}
+.footer-notice{
+max-width:760px;
+margin:16px auto 0;
+font-size:11px;
+line-height:1.6;
+color:#737b98
 }
 
-.now-info{
-  flex:1;
-  min-width:0;
-}
-
-.now-title{
-  font-size:13px;
-  font-weight:700;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-.now-artist{
-  font-size:11px;
-  color:#777f99;
-  margin-top:3px;
-}
-
-audio{
-  width:100%;
-  height:38px;
-}
-
-/* NAV */
-
-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:65px;
-  background:#0d1120;
-  border-top:1px solid #282e48;
-  z-index:40;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-}
-
-nav button{
-  border:0;
-  background:none;
-  color:#747c95;
-  font-size:11px;
-  cursor:pointer;
-}
-
-nav button.active{
-  color:#8068ff;
-}
-
-.nav-icon{
-  display:block;
-  font-size:19px;
-  margin-bottom:3px;
-}
-
-.toast{
-  position:fixed;
-  top:18px;
-  left:50%;
-  transform:translateX(-50%) translateY(-80px);
-  background:#1b2340;
-  border:1px solid #39446b;
-  color:white;
-  padding:11px 16px;
-  border-radius:12px;
-  z-index:100;
-  transition:.3s;
-  font-size:12px;
-}
-
-.toast.show{
-  transform:translateX(-50%) translateY(0);
+@media(max-width:600px){
+.logo{font-size:37px}
+main{padding-left:14px;padding-right:14px}
+.audio-title{display:none}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="brand">AudioHub</div>
-  <div class="creator">Created by Vishu raj</div>
+<div class="app">
+
+<header class="header">
+<div class="logo">AudioHub</div>
+<div class="creator">Listen • Create • Share</div>
 </header>
 
+<main>
 
-<!-- HOME PAGE -->
+<!-- HOME -->
+<section id="home">
 
-<main id="homePage" class="page">
+<input
+id="homeSearch"
+class="search"
+placeholder="Search playlists, audio or creators..."
+oninput="renderHome()"
+>
 
-  <section class="hero">
-    <h1>Listen. Learn. Grow.</h1>
-    <p>
-      Explore your playlists and enjoy your audio in one place.
-    </p>
-  </section>
+<div class="tabs">
+<button class="tab active" onclick="setHomeTab(this,'playlists')">
+Playlists
+</button>
 
-  <div class="search">
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="Search playlists..."
-      oninput="searchPlaylists()"
-    >
-  </div>
+<button class="tab" onclick="setHomeTab(this,'discover')">
+Discover
+</button>
+</div>
 
-  <div class="section-title">
-    Your Playlists
-  </div>
+<h2 id="homeTitle" class="section-title">Your Playlists</h2>
 
-  <div class="playlists" id="playlistCards">
+<div id="homeContent"></div>
 
-    <!-- OSHO -->
-
-    <button
-      class="playlist-card"
-      data-search="osho wisdom awareness"
-      onclick="openPlaylist('osho')"
-    >
-
-      <div class="playlist-icon">🧘</div>
-
-      <div class="playlist-info">
-        <div class="playlist-name">
-          Osho
-        </div>
-
-        <div class="playlist-desc">
-          Wisdom, awareness & inner growth
-        </div>
-      </div>
-
-      <div class="arrow">›</div>
-
-    </button>
+</section>
 
 
-    <!-- PREMANAND JI -->
+<!-- EXPLORE -->
+<section id="explore" class="hidden">
 
-    <button
-      class="playlist-card"
-      data-search="premanand ji spiritual devotional"
-      onclick="openPlaylist('premanand')"
-    >
+<h2 class="section-title">Discover</h2>
 
-      <div class="playlist-icon">🙏</div>
+<div id="discoverContent"></div>
 
-      <div class="playlist-info">
-        <div class="playlist-name">
-          Premanand Ji
-        </div>
-
-        <div class="playlist-desc">
-          Spiritual talks & devotional wisdom
-        </div>
-      </div>
-
-      <div class="arrow">›</div>
-
-    </button>
+</section>
 
 
-    <!-- STUDY -->
+<!-- PLAYLIST -->
+<section id="playlistPage" class="hidden">
 
-    <button
-      class="playlist-card"
-      data-search="study time learning focus"
-      onclick="openPlaylist('study')"
-    >
+<button class="btn" onclick="showHome()">← Back</button>
 
-      <div class="playlist-icon">📚</div>
+<div class="hero" style="margin-top:15px">
+<div id="plIcon" class="hero-icon">◉</div>
+<h1 id="plName">Playlist</h1>
+<p id="plDesc"></p>
+</div>
 
-      <div class="playlist-info">
-        <div class="playlist-name">
-          Study Time
-        </div>
+<div id="trackList"></div>
 
-        <div class="playlist-desc">
-          Focus, learning & study sessions
-        </div>
-      </div>
-
-      <div class="arrow">›</div>
-
-    </button>
+</section>
 
 
-    <!-- MOTIVATIONAL -->
+<!-- DOWNLOADS -->
+<section id="downloads" class="hidden">
 
-    <button
-      class="playlist-card"
-      data-search="motivational motivation growth"
-      onclick="openPlaylist('motivational')"
-    >
+<h2 class="section-title">Downloads</h2>
 
-      <div class="playlist-icon">🚀</div>
+<div id="downloadsContent"></div>
 
-      <div class="playlist-info">
-        <div class="playlist-name">
-          Motivational
-        </div>
+</section>
 
-        <div class="playlist-desc">
-          Motivation, discipline & personal growth
-        </div>
-      </div>
 
-      <div class="arrow">›</div>
+<!-- ACCOUNT -->
+<section id="account" class="hidden">
 
-    </button>
+<h2 class="section-title">Account</h2>
 
-  </div>
+<div id="accountContent"></div>
+
+</section>
+
+
+<!-- PROFILE -->
+<section id="profilePage" class="hidden">
+
+<button class="btn" onclick="showExplore()">← Back</button>
+
+<div id="profileContent" style="margin-top:15px"></div>
+
+</section>
 
 </main>
-
-
-
-<!-- PLAYLIST PAGE -->
-
-<main id="playlistPage" class="page playlist-page">
-
-  <button
-    class="back"
-    onclick="goHome()"
-  >
-    ← Back
-  </button>
-
-  <div class="playlist-header">
-
-    <div
-      class="big-icon"
-      id="playlistIcon"
-    >
-      🎵
-    </div>
-
-    <div>
-      <h2 id="playlistTitle">
-        Playlist
-      </h2>
-
-      <p id="playlistDescription">
-        Your playlist
-      </p>
-    </div>
-
-  </div>
-
-
-  <div
-    id="trackList"
-    class="tracks"
-  ></div>
-
-</main>
-
 
 
 <!-- AUDIO PLAYER -->
+<div id="audioWrap" class="audio-wrap">
 
-<div class="player">
+<div class="audio-inner">
 
-  <div class="now">
+<div id="audioTitle" class="audio-title">
+Select audio
+</div>
 
-    <div class="now-icon">
-      🎵
-    </div>
+<audio id="audioPlayer" controls></audio>
 
-    <div class="now-info">
-
-      <div
-        id="nowTitle"
-        class="now-title"
-      >
-        Select an audio
-      </div>
-
-      <div
-        id="nowArtist"
-        class="now-artist"
-      >
-        AudioHub
-      </div>
-
-    </div>
-
-  </div>
-
-  <audio
-    id="audioPlayer"
-    controls
-    preload="metadata"
-  ></audio>
+</div>
 
 </div>
 
 
-
 <!-- BOTTOM NAV -->
+<nav class="nav">
 
-<nav>
+<button class="active" onclick="showHome()">
+<span class="nav-icon">⌂</span>
+<span class="nav-label">Home</span>
+</button>
 
-  <button
-    class="active"
-    onclick="goHome()"
-  >
-    <span class="nav-icon">⌂</span>
-    Home
-  </button>
+<button onclick="showExplore()">
+<span class="nav-icon">⌁</span>
+<span class="nav-label">Explore</span>
+</button>
 
-  <button
-    onclick="goHome()"
-  >
-    <span class="nav-icon">☷</span>
-    Playlists
-  </button>
+<button onclick="showDownloads()">
+<span class="nav-icon">↓</span>
+<span class="nav-label">Downloads</span>
+</button>
 
-  <button
-    onclick="showFavorites()"
-  >
-    <span class="nav-icon">♡</span>
-    Favorites
-  </button>
-
-  <button
-    onclick="showToast('More features coming soon')"
-  >
-    <span class="nav-icon">⋯</span>
-    More
-  </button>
+<button onclick="showAccount()">
+<span class="nav-icon">◯</span>
+<span class="nav-label">Account</span>
+</button>
 
 </nav>
 
+</div>
 
-<div id="toast" class="toast"></div>
+
+<!-- AUTH MODAL -->
+<div id="authModal" class="modal hidden">
+
+<div class="modal-box">
+
+<h2 id="authTitle">Create account</h2>
+
+<input
+id="authEmail"
+class="input"
+type="email"
+placeholder="Email address"
+>
+
+<input
+id="authPassword"
+class="input"
+type="password"
+placeholder="Password"
+>
+
+<button class="btn primary wide" onclick="submitAuth()">
+Continue
+</button>
+
+<div style="height:10px"></div>
+
+<button class="btn wide" onclick="switchAuth()">
+Switch Login / Signup
+</button>
+
+<button class="btn wide" style="margin-top:8px" onclick="closeModal('authModal')">
+Close
+</button>
+
+<p id="authStatus" class="small muted" style="margin-top:12px"></p>
+
+</div>
+
+</div>
 
 
+<!-- UPLOAD MODAL -->
+<div id="uploadModal" class="modal hidden">
+
+<div class="modal-box">
+
+<h2>Upload Audio</h2>
+
+<label class="form-label">Audio file</label>
+<input id="uploadFile" class="input" type="file" accept="audio/*">
+
+<label class="form-label">Cover image</label>
+<input id="coverFile" class="input" type="file" accept="image/*">
+
+<label class="form-label">Title</label>
+<input id="uploadTitle" class="input" placeholder="Audio title">
+
+<label class="form-label">Description</label>
+<textarea id="uploadDesc" class="textarea" placeholder="Describe this audio"></textarea>
+
+<label class="form-label">Category</label>
+
+<select id="uploadCategory" class="select">
+
+<option value="study">Study</option>
+<option value="motivation">Motivational</option>
+<option value="spiritual">Spiritual</option>
+<option value="talks">Talks</option>
+<option value="other">Other</option>
+
+</select>
+
+<label class="form-label">Visibility</label>
+
+<select id="uploadVisibility" class="select">
+<option value="public">Public</option>
+</select>
+
+<label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0">
+
+<input id="rights" type="checkbox">
+
+<span class="small">
+I confirm that I have the right/permission to upload this audio.
+</span>
+
+</label>
+
+<button class="btn primary wide" onclick="uploadAudio()">
+Upload
+</button>
+
+<button
+class="btn wide"
+style="margin-top:8px"
+onclick="closeModal('uploadModal')"
+>
+Cancel
+</button>
+
+<p id="uploadStatus" class="small muted" style="margin-top:12px"></p>
+
+</div>
+
+</div>
+
+
+<!-- COMMENTS -->
+<div id="commentsModal" class="modal hidden">
+
+<div class="modal-box">
+
+<h2>Comments</h2>
+
+<div id="commentsList"></div>
+
+<div style="display:flex;gap:8px;margin-top:13px">
+
+<input
+id="commentInput"
+class="input"
+style="margin:0"
+placeholder="Write a comment..."
+>
+
+<button class="btn primary" onclick="addComment()">
+Post
+</button>
+
+</div>
+
+<button
+class="btn wide"
+style="margin-top:10px"
+onclick="closeModal('commentsModal')"
+>
+Close
+</button>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-/* =========================================
-   PLAYLIST DATA
-   ========================================= */
+/* =========================
+SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://lnhsuztjmteqrztvcigs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_E1uXefc5RjykYdAK12PJ_Q_u6mgm8XF";
+
+const sbReady =
+!SUPABASE_ANON_KEY.includes("PASTE_YOUR");
+
+const sb =
+sbReady
+? window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+)
+: null;
+
+
+/* =========================
+PLAYLISTS
+========================= */
 
 const playlists = {
 
-  osho: {
-    title: "Osho",
-    icon: "🧘",
-    description: "Wisdom, awareness & inner growth",
+osho:{
+name:"Osho",
+icon:"◉",
+desc:"Wisdom, awareness & inner growth",
+tracks:[]
+},
 
-    tracks: []
+premanand:{
+name:"Premanand Ji",
+icon:"◇",
+desc:"Spiritual talks & devotional wisdom",
+tracks:[]
+},
 
-  },
+study:{
+name:"Study Time",
+icon:"▤",
+desc:"Focus, learning & study sessions",
+tracks:[
+{
+title:"Parvati - Sadhu Tiwari",
+subtitle:"Study Time",
+url:"https://lnhsuztjmteqrztvcigs.supabase.co/storage/v1/object/public/Audio/Parvati%20%20%20Sadhu%20Tiwari.m4a"
+}
+]
+},
 
-
-  premanand: {
-    title: "Premanand Ji",
-    icon: "🙏",
-    description: "Spiritual talks & devotional wisdom",
-
-    tracks: []
-
-  },
-
-
-  study: {
-    title: "Study Time",
-    icon: "📚",
-    description: "Focus, learning & study sessions",
-
-    tracks: [
-
-      {
-        title: "Parvati Sadhu Tiwari",
-        artist: "Study Audio",
-
-        url: "https://lnhsuztjmteqrztvcigs.supabase.co/storage/v1/object/public/Audio/Parvati%20%20%20Sadhu%20Tiwari.m4a"
-      }
-
-    ]
-
-  },
-
-
-  motivational: {
-    title: "Motivational",
-    icon: "🚀",
-    description: "Motivation, discipline & personal growth",
-
-    tracks: []
-
-  }
+motivational:{
+name:"Motivational",
+icon:"↗",
+desc:"Motivation, discipline & personal growth",
+tracks:[]
+}
 
 };
 
 
+Object.values(playlists).forEach(p=>{
 
-/* =========================================
-   ELEMENTS
-   ========================================= */
+p.tracks.forEach(t=>{
 
-const homePage =
-  document.getElementById("homePage");
+t.id=encodeURIComponent(t.url);
 
-const playlistPage =
-  document.getElementById("playlistPage");
+});
 
-const trackList =
-  document.getElementById("trackList");
-
-const playlistTitle =
-  document.getElementById("playlistTitle");
-
-const playlistDescription =
-  document.getElementById("playlistDescription");
-
-const playlistIcon =
-  document.getElementById("playlistIcon");
-
-const audioPlayer =
-  document.getElementById("audioPlayer");
-
-const nowTitle =
-  document.getElementById("nowTitle");
-
-const nowArtist =
-  document.getElementById("nowArtist");
+});
 
 
+let homeTab="playlists";
+let currentTracks=[];
+let currentPlaylist=null;
+let currentAudioId=null;
+let currentCommunityAudio=null;
+let authMode="signup";
 
-/* =========================================
-   OPEN PLAYLIST
-   ========================================= */
+let favorites=
+JSON.parse(
+localStorage.getItem("audiohubFavorites")||"[]"
+);
+
+let downloads=
+JSON.parse(
+localStorage.getItem("audiohubDownloads")||"[]"
+);
+
+
+/* =========================
+OFFLINE DATABASE
+========================= */
+
+const DB="AudioHubOfflineDB";
+const STORE="audio";
+
+let dbp;
+
+function db(){
+
+if(dbp)return dbp;
+
+dbp=new Promise((res,rej)=>{
+
+let r=indexedDB.open(DB,1);
+
+r.onupgradeneeded=()=>{
+r.result.createObjectStore(
+STORE,
+{keyPath:"id"}
+);
+};
+
+r.onsuccess=()=>res(r.result);
+
+r.onerror=()=>rej(r.error);
+
+});
+
+return dbp;
+}
+
+
+async function saveLocal(t){
+
+let r=await fetch(t.url);
+
+if(!r.ok)throw 0;
+
+let blob=await r.blob();
+
+let d=await db();
+
+return new Promise((res,rej)=>{
+
+let x=d.transaction(
+STORE,
+"readwrite"
+);
+
+x.objectStore(STORE).put({
+
+id:t.id,
+title:t.title,
+subtitle:t.subtitle||"AudioHub",
+blob
+
+});
+
+x.oncomplete=res;
+x.onerror=()=>rej(x.error);
+
+});
+
+}
+
+
+async function localAudio(id){
+
+let d=await db();
+
+return new Promise((res,rej)=>{
+
+let r=d.transaction(STORE)
+.objectStore(STORE)
+.get(id);
+
+r.onsuccess=()=>{
+res(r.result||null);
+};
+
+r.onerror=()=>rej(r.error);
+
+});
+
+}
+
+
+async function removeLocal(id){
+
+let d=await db();
+
+return new Promise((res,rej)=>{
+
+let x=d.transaction(
+STORE,
+"readwrite"
+);
+
+x.objectStore(STORE).delete(id);
+
+x.oncomplete=res;
+x.onerror=()=>rej(x.error);
+
+});
+
+}
+
+
+/* =========================
+PAGE NAVIGATION
+========================= */
+
+function hide(){
+
+[
+"home",
+"explore",
+"playlistPage",
+"downloads",
+"account",
+"profilePage"
+]
+.forEach(x=>
+document
+.getElementById(x)
+.classList.add("hidden")
+);
+
+}
+
+
+function nav(i){
+
+document
+.querySelectorAll(".nav button")
+.forEach((b,n)=>
+b.classList.toggle(
+"active",
+n===i
+)
+);
+
+}
+
+
+function showHome(){
+
+hide();
+
+document
+.getElementById("home")
+.classList.remove("hidden");
+
+nav(0);
+
+renderHome();
+
+scrollTo(0,0);
+
+}
+
+
+function showExplore(){
+
+hide();
+
+document
+.getElementById("explore")
+.classList.remove("hidden");
+
+nav(1);
+
+renderDiscover();
+
+scrollTo(0,0);
+
+}
+
+
+function showDownloads(){
+
+hide();
+
+document
+.getElementById("downloads")
+.classList.remove("hidden");
+
+nav(2);
+
+renderDownloads();
+
+}
+
+
+async function showAccount(){
+
+hide();
+
+document
+.getElementById("account")
+.classList.remove("hidden");
+
+nav(3);
+
+renderAccount();
+
+}
+
+
+function setHomeTab(btn,tab){
+
+homeTab=tab;
+
+document
+.querySelectorAll("#home .tab")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+btn.classList.add("active");
+
+renderHome();
+
+}
+
+
+/* =========================
+HOME
+========================= */
+
+function renderHome(){
+
+const q=
+(
+document
+.getElementById("homeSearch")
+.value||""
+).toLowerCase();
+
+const c=
+document.getElementById("homeContent");
+
+document.getElementById("homeTitle")
+.textContent=
+homeTab==="playlists"
+?"Your Playlists"
+:"Discover";
+
+if(homeTab==="discover"){
+
+renderDiscoverInto(c,q);
+
+return;
+
+}
+
+c.innerHTML="";
+
+Object.entries(playlists).forEach(
+([id,p])=>{
+
+if(
+q &&
+!(`${p.name} ${p.desc}`)
+.toLowerCase()
+.includes(q)
+)return;
+
+let e=
+document.createElement("div");
+
+e.className="card playlist";
+
+e.onclick=()=>{
+openPlaylist(id);
+};
+
+e.innerHTML=`
+
+<div class="play-icon">
+${p.icon}
+</div>
+
+<div class="info">
+
+<div class="name">
+${esc(p.name)}
+</div>
+
+<div class="desc">
+${esc(p.desc)}
+</div>
+
+</div>
+
+<div class="arrow">
+›
+</div>
+
+`;
+
+c.appendChild(e);
+
+});
+
+}
+
+
+/* =========================
+PLAYLIST
+========================= */
 
 function openPlaylist(id){
 
-  const playlist =
-    playlists[id];
+let p=playlists[id];
 
-  if(!playlist){
-    return;
-  }
+if(!p)return;
 
-  homePage.style.display = "none";
+currentPlaylist=id;
 
-  playlistPage.style.display = "block";
+currentTracks=p.tracks;
 
-  playlistTitle.textContent =
-    playlist.title;
+hide();
 
-  playlistDescription.textContent =
-    playlist.description;
+document
+.getElementById("playlistPage")
+.classList.remove("hidden");
 
-  playlistIcon.textContent =
-    playlist.icon;
+nav(0);
 
-  renderTracks(
-    playlist.tracks
-  );
+document
+.getElementById("plIcon")
+.textContent=p.icon;
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
+document
+.getElementById("plName")
+.textContent=p.name;
 
+document
+.getElementById("plDesc")
+.textContent=p.desc;
 
+renderTracks();
 
-/* =========================================
-   RENDER TRACKS
-   ========================================= */
-
-function renderTracks(tracks){
-
-  trackList.innerHTML = "";
-
-  if(tracks.length === 0){
-
-    trackList.innerHTML = `
-      <div class="empty">
-        <div style="font-size:32px;margin-bottom:10px;">
-          🎵
-        </div>
-
-        No audio added yet.
-
-        <div style="font-size:11px;margin-top:7px;">
-          Audio will appear here when added to this playlist.
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
-
-  tracks.forEach(function(track,index){
-
-    const div =
-      document.createElement("div");
-
-    div.className = "track";
-
-    div.innerHTML = `
-
-      <button
-        class="play-btn"
-        onclick="playTrack(${index})"
-      >
-        ▶
-      </button>
-
-      <div class="track-info">
-
-        <div class="track-title">
-          ${escapeHTML(track.title)}
-        </div>
-
-        <div class="track-artist">
-          ${escapeHTML(track.artist)}
-        </div>
-
-      </div>
-
-      <button
-        class="fav"
-        onclick="toggleFavorite('${escapeHTML(track.title)}',this)"
-      >
-        ♡
-      </button>
-
-    `;
-
-    trackList.appendChild(div);
-
-  });
+scrollTo(0,0);
 
 }
 
 
+function renderTracks(){
 
-/* =========================================
-   CURRENT PLAYLIST
-   ========================================= */
+let c=
+document.getElementById("trackList");
 
-let currentTracks = [];
+if(!currentTracks.length){
 
-function playTrack(index){
+c.innerHTML=`
+<div class="empty">
+<b>No audio added yet</b>
+<div style="margin-top:7px">
+More audio will appear here soon.
+</div>
+</div>
+`;
 
-  const tracks =
-    currentTracks.length
-      ? currentTracks
-      : getCurrentTracks();
+return;
 
-  const track =
-    tracks[index];
+}
 
-  if(!track){
-    return;
-  }
+c.innerHTML="";
 
-  nowTitle.textContent =
-    track.title;
+currentTracks.forEach(t=>{
 
-  nowArtist.textContent =
-    track.artist;
+let d=
+document.createElement("div");
 
-  audioPlayer.src =
-    track.url;
+d.className="card";
 
-  audioPlayer.play()
-    .catch(function(){
+d.innerHTML=`
 
-      showToast(
-        "Press ▶ to start audio"
-      );
+<div class="track">
 
-    });
+<div class="info">
 
-  localStorage.setItem(
-    "lastPlayed",
-    JSON.stringify(track)
-  );
+<div class="track-title">
+${esc(t.title)}
+</div>
+
+<div class="track-sub">
+${esc(t.subtitle||"AudioHub")}
+</div>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="btn primary"
+onclick="playSourceByObject(${JSON.stringify(t).replace(/"/g,'&quot;')})">
+▶ Play
+</button>
+
+<button class="icon-btn ${favorites.includes(t.id)?"active":""}"
+onclick="toggleFavorite('${t.id}')">
+${favorites.includes(t.id)?"♥":"♡"}
+</button>
+
+<button class="icon-btn"
+onclick="downloadTrack('${t.id}')">
+↓
+</button>
+
+</div>
+
+`;
+
+c.appendChild(d);
+
+});
 
 }
 
 
+/* =========================
+PLAYER
+========================= */
 
-/* =========================================
-   TRACK LIST CONNECTION
-   ========================================= */
+function playSourceByObject(t){
 
-function getCurrentTracks(){
-
-  const title =
-    playlistTitle.textContent;
-
-  for(const key in playlists){
-
-    if(
-      playlists[key].title === title
-    ){
-
-      currentTracks =
-        playlists[key].tracks;
-
-      return currentTracks;
-
-    }
-
-  }
-
-  return [];
+playSource(t);
 
 }
 
 
+async function playSource(t){
 
-/* =========================================
-   UPDATE CURRENT TRACKS
-   ========================================= */
+currentAudioId=t.id;
 
-const originalOpenPlaylist =
-  openPlaylist;
+let local=
+await localAudio(t.id)
+.catch(()=>null);
 
+let url;
 
-/* =========================================
-   FAVORITES
-   ========================================= */
+if(local){
 
-function toggleFavorite(title,button){
+url=URL.createObjectURL(local.blob);
 
-  let favorites =
-    JSON.parse(
-      localStorage.getItem("favorites") || "[]"
-    );
+}else{
 
-  if(favorites.includes(title)){
+url=t.url;
 
-    favorites =
-      favorites.filter(
-        item => item !== title
-      );
+}
 
-    button.classList.remove("active");
+let player=
+document.getElementById("audioPlayer");
 
-    button.textContent = "♡";
+player.src=url;
 
-    showToast(
-      "Removed from favorites"
-    );
+document.getElementById("audioTitle")
+.textContent=t.title;
 
-  }else{
+document
+.getElementById("audioWrap")
+.classList.add("show");
 
-    favorites.push(title);
-
-    button.classList.add("active");
-
-    button.textContent = "♥";
-
-    showToast(
-      "Added to favorites"
-    );
-
-  }
-
-  localStorage.setItem(
-    "favorites",
-    JSON.stringify(favorites)
-  );
+player.play()
+.catch(()=>{});
 
 }
 
 
+/* =========================
+FAVORITES
+========================= */
 
-/* =========================================
-   SEARCH PLAYLISTS
-   ========================================= */
+function toggleFavorite(id){
 
-function searchPlaylists(){
+if(favorites.includes(id)){
 
-  const query =
-    document
-      .getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
+favorites=
+favorites.filter(x=>x!==id);
 
-  const cards =
-    document.querySelectorAll(
-      ".playlist-card"
-    );
+}else{
 
-  cards.forEach(function(card){
+favorites.push(id);
 
-    const text =
-      card
-        .getAttribute("data-search")
-        .toLowerCase();
+}
 
-    if(text.includes(query)){
+localStorage.setItem(
+"audiohubFavorites",
+JSON.stringify(favorites)
+);
 
-      card.classList.remove(
-        "hidden"
-      );
-
-    }else{
-
-      card.classList.add(
-        "hidden"
-      );
-
-    }
-
-  });
+if(currentPlaylist)
+renderTracks();
 
 }
 
 
+function isDownloaded(id){
 
-/* =========================================
-   HOME
-   ========================================= */
-
-function goHome(){
-
-  playlistPage.style.display =
-    "none";
-
-  homePage.style.display =
-    "block";
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+return downloads.includes(id);
 
 }
 
 
+/* =========================
+DOWNLOAD
+========================= */
 
-/* =========================================
-   FAVORITES BUTTON
-   ========================================= */
+async function downloadTrack(id){
 
-function showFavorites(){
+let t;
 
-  const favorites =
-    JSON.parse(
-      localStorage.getItem(
-        "favorites"
-      ) || "[]"
-    );
+for(let p of Object.values(playlists)){
 
-  if(favorites.length === 0){
+let found=
+p.tracks.find(x=>x.id===id);
 
-    showToast(
-      "No favorites yet"
-    );
+if(found){
 
-    return;
-  }
+t=found;
 
-  showToast(
-    favorites.length +
-    " favorite(s) saved"
-  );
+break;
+
+}
+
+}
+
+if(!t)return;
+
+if(isDownloaded(id)){
+
+alert("Already downloaded.");
+
+return;
+
+}
+
+if(!confirm(
+"Download this audio for offline playback inside AudioHub?"
+))return;
+
+try{
+
+await saveLocal(t);
+
+downloads.push(id);
+
+localStorage.setItem(
+"audiohubDownloads",
+JSON.stringify(downloads)
+);
+
+alert(
+"Downloaded successfully. You can play it offline from AudioHub Downloads."
+);
+
+}catch(e){
+
+alert(
+"Download failed. Please check your internet connection."
+);
+
+}
 
 }
 
 
+async function renderDownloads(){
 
-/* =========================================
-   TOAST
-   ========================================= */
+let c=
+document.getElementById("downloadsContent");
 
-function showToast(message){
+c.innerHTML="";
 
-  const toast =
-    document.getElementById(
-      "toast"
-    );
+let found=[];
 
-  toast.textContent =
-    message;
+for(let p of Object.values(playlists)){
 
-  toast.classList.add(
-    "show"
-  );
+for(let t of p.tracks){
 
-  setTimeout(function(){
+if(downloads.includes(t.id)){
 
-    toast.classList.remove(
-      "show"
-    );
+found.push(t);
 
-  },2000);
+}
+
+}
+
+}
+
+if(!found.length){
+
+c.innerHTML=`
+<div class="empty">
+<b>No downloads yet</b>
+<div style="margin-top:7px">
+Downloaded audio will appear here.
+</div>
+</div>
+`;
+
+return;
+
+}
+
+found.forEach(t=>{
+
+let d=
+document.createElement("div");
+
+d.className="card";
+
+d.innerHTML=`
+
+<div class="track">
+
+<div class="info">
+
+<div class="track-title">
+${esc(t.title)}
+</div>
+
+<div class="track-sub">
+Available offline
+</div>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="btn primary"
+onclick="playSourceByObject(${JSON.stringify(t).replace(/"/g,'&quot;')})">
+▶ Play
+</button>
+
+<button class="btn danger"
+onclick="deleteDownload('${t.id}')">
+Remove
+</button>
+
+</div>
+
+`;
+
+c.appendChild(d);
+
+});
 
 }
 
 
+async function deleteDownload(id){
 
-/* =========================================
-   HTML SAFETY
-   ========================================= */
+if(!confirm("Remove this download?"))
+return;
 
-function escapeHTML(text){
+await removeLocal(id);
 
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+downloads=
+downloads.filter(x=>x!==id);
+
+localStorage.setItem(
+"audiohubDownloads",
+JSON.stringify(downloads)
+);
+
+renderDownloads();
 
 }
 
 
+/* =========================
+AUTH
+========================= */
 
-/* =========================================
-   FIX PLAYLIST TRACK CONNECTION
-   ========================================= */
+function openAuth(mode){
 
-const oldOpenPlaylist =
-  window.openPlaylist;
+authMode=mode;
 
-window.openPlaylist =
-  function(id){
+document.getElementById("authTitle")
+.textContent=
+mode==="login"
+?"Login"
+:"Create account";
 
-    currentTracks =
-      playlists[id]
-        ? playlists[id].tracks
-        : [];
+document.getElementById("authStatus")
+.textContent="";
 
-    oldOpenPlaylist(id);
+document
+.getElementById("authModal")
+.classList.remove("hidden");
 
-  };
+}
 
-</script>
 
-</body>
-</html>
+function switchAuth(){
+
+authMode=
+authMode==="login"
+?"signup"
+:"login";
+
+document.getElementById("authTitle")
+.textContent=
+authMode==="login"
+?"Login"
+:"Create account";
+
+}
+
+
+async function submitAuth(){
+
+if(!sb){
+
+document.getElementById("authStatus")
+.textContent=
+"Supabase is not connected.";
+
+return;
+
+}
