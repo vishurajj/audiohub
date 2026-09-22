@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AudioHub</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b0d12;color:#f5f7fb;font-family:system-ui,Arial}.app{max-width:900px;margin:auto;padding-bottom:90px}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px}.logo{font-size:30px;font-weight:800}.logo span{color:#7c5cff}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.btn{border:1px solid #30384b;background:#1a2030;color:white;border-radius:13px;padding:10px 15px}.primary{background:#7c5cff;border-color:#7c5cff}.danger{color:#ff7187}
+.search{margin:0 22px 15px;width:calc(100% - 44px);padding:16px;border-radius:17px;border:1px solid #30384b;background:#171b27;color:white}
+main{padding:0 22px}.card{background:#171b27;border:1px solid #30384b;border-radius:20px;padding:17px;margin:12px 0}.row{display:flex;gap:12px;align-items:center;justify-content:space-between}.muted,.meta{color:#9da6ba}.note{white-space:pre-wrap;margin:9px 0}audio{width:100%;margin-top:10px}
+h1{font-size:31px}h2{font-size:24px}.actions{display:flex;gap:8px;flex-wrap:wrap}.hidden{display:none!important}
+label{display:block;color:#9da6ba;margin:13px 0 6px}input,textarea,select{width:100%;padding:12px;border-radius:12px;border:1px solid #30384b;background:#0f1219;color:white}textarea{min-height:90px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#0b0d12;border-top:1px solid #30384b}.nav{max-width:900px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.nav button{border:0;background:none;color:#9da6ba;padding:12px}.nav button.active{color:white}
+.modal{position:fixed;inset:0;background:#0009;display:flex;align-items:flex-end;justify-content:center;padding:12px;z-index:10}.modal>div{width:min(700px,100%);max-height:92vh;overflow:auto;background:#121620;border:1px solid #30384b;border-radius:25px;padding:20px}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#283044;padding:12px 18px;border-radius:13px;z-index:20}
+.empty{text-align:center;padding:30px;color:#9da6ba}.badge{font-size:12px;padding:4px 8px;border-radius:8px;background:#252d3e}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">Audio<span>Hub</span></div><button class="btn" id="accountTop">○</button></header>
+<input id="search" class="search" placeholder="Search playlists or songs...">
+
+<main>
+<section id="homePage">
+<h1>Home</h1><p class="muted">Listen, create and share your audio.</p>
+<div class="card"><div class="row"><div><h2 style="margin:0">Upload your audio</h2><p class="muted">Title, note and public/private setting.</p></div><button class="btn primary" id="openUpload">Upload</button></div></div>
+<h2>Recent public audio</h2><div id="homeList"></div>
+</section>
+
+<section id="explorePage" class="hidden"><h1>Discover</h1><p class="muted">Public audio shared by creators.</p><div id="discoverList"></div></section>
+<section id="downloadsPage" class="hidden"><h1>Downloads</h1><div class="empty">Downloaded audio will appear here.</div></section>
+
+<section id="accountPage" class="hidden">
+<h1>Account</h1><div id="accountBox" class="card"></div>
+<h2>My Uploads</h2><p class="muted">Your uploaded audio, date/time, note, visibility, Edit and Delete controls.</p>
+<div id="myUploads"></div>
+</section>
+</main></div>
+
+<div class="bottom"><nav class="nav">
+<button data-page="homePage" class="active">⌂<br>Home</button>
+<button data-page="explorePage">⌁<br>Explore</button>
+<button data-page="downloadsPage">↓<br>Downloads</button>
+<button data-page="accountPage">○<br>Account</button>
+</nav></div>
+
+<div id="modal" class="modal hidden"><div>
+<div class="row"><h2 id="modalTitle">Upload audio</h2><button class="btn" id="closeModal">✕</button></div>
+<form id="audioForm">
+<input type="hidden" id="editingId">
+<label>Audio file</label><input id="audioFile" type="file" accept="audio/*"><p class="muted" id="fileName">No file selected</p>
+<label>Title</label><input id="title" required maxlength="150" placeholder="Audio title">
+<label>Note</label><textarea id="note" maxlength="2000" placeholder="Write a note..."></textarea>
+<label>Visibility</label><select id="isPublic"><option value="true">Public</option><option value="false">Private</option></select>
+<div class="actions" style="margin-top:16px"><button class="btn primary" id="saveAudio">Upload</button><button type="button" class="btn" id="cancelModal">Cancel</button></div>
+</form></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+/* Replace these with the SAME values used by your current AudioHub index.html. */
+const SUPABASE_URL="PASTE_YOUR_SUPABASE_URL_HERE";
+const SUPABASE_KEY="PASTE_YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY_HERE";
+const {createClient}=supabase, sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+const TABLE="audio_uploads",BUCKET="audio";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const date=s=>s?new Date(s).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}):"";
+function msg(s){$("toast").textContent=s;$("toast").classList.remove("hidden");clearTimeout(window.t);window.t=setTimeout(()=>$("toast").classList.add("hidden"),3000)}
+async function user(){return (await sb.auth.getUser()).data.user}
+function url(p){return sb.storage.from(BUCKET).getPublicUrl(p).data.publicUrl}
+function card(x,owner=false){return `<article class="card"><div class="row"><div><h3 style="margin:0">${esc(x.title)}</h3><div class="meta">${date(x.created_at)} • <span class="badge">${x.is_public?"Public":"Private"}</span></div></div>${owner?`<div class="actions"><button class="btn" onclick="editUpload('${x.id}')">Edit</button><button class="btn danger" onclick="deleteUpload('${x.id}')">Delete</button></div>`:""}</div>${x.note?`<div class="note">${esc(x.note)}</div>`:""}<audio controls preload="none" src="${esc(url(x.file_path))}"></audio>${owner?`<button class="btn" style="margin-top:8px" onclick="toggleVisibility('${x.id}',${x.is_public})">Make ${x.is_public?"Private":"Public"}</button>`:""}</article>`}
+
+async function loadPublic(){
+ const {data,error}=await sb.from(TABLE).select("*").eq("is_public",true).order("created_at",{ascending:false}).limit(30);
+ const html=error?`<div class="card">${esc(error.message)}</div>`:data.length?data.map(x=>card(x)).join(""):`<div class="empty">No public audio yet.</div>`;
+ $("homeList").innerHTML=html;$("discoverList").innerHTML=html;
+}
+async function loadAccount(){
+ const u=await user();
+ if(!u){$("accountBox").innerHTML="<h2>Not logged in</h2><p class='muted'>Log in to manage uploads.</p>";$("myUploads").innerHTML="";return}
+ $("accountBox").innerHTML=`<div class="row"><div><h2 style="margin:0">${esc(u.email)}</h2><p class="muted">AudioHub account</p></div><button class="btn danger" id="logout">Logout</button></div>`;
+ $("logout").onclick=async()=>{await sb.auth.signOut();location.reload()};
+ const {data,error}=await sb.from(TABLE).select("*").eq("user_id",u.id).order("created_at",{ascending:false});
+ $("myUploads").innerHTML=error?`<div class="card">${esc(error.message)}</div>`:data.length?data.map(x=>card(x,true)).join(""):`<div class="empty">You have not uploaded any audio yet.</div>`;
+}
+function openModal(x=null){
+ $("modal").classList.remove("hidden");$("audioForm").reset();$("editingId").value=x?.id||"";
+ $("modalTitle").textContent=x?"Edit audio":"Upload audio";$("saveAudio").textContent=x?"Save changes":"Upload";$("audioFile").required=!x;
+ $("fileName").textContent=x?"Leave empty to keep current file":"No file selected";
+ if(x){$("title").value=x.title||"";$("note").value=x.note||"";$("isPublic").value=String(!!x.is_public)}
+}
+function closeModal(){$("modal").classList.add("hidden")}
+$("openUpload").onclick=async()=>{if(await user())openModal();else msg("Please log in first.")};
+$("closeModal").onclick=closeModal;$("cancelModal").onclick=closeModal;
+$("audioFile").onchange=e=>$("fileName").textContent=e.target.files[0]?.name||"No file selected";
+
+$("audioForm").onsubmit=async e=>{
+ e.preventDefault();const u=await user();if(!u){msg("Please log in first.");return}
+ const id=$("editingId").value,file=$("audioFile").files[0],title=$("title").value.trim(),note=$("note").value.trim(),pub=$("isPublic").value==="true";
+ if(!title){msg("Title is required.");return}
+ $("saveAudio").disabled=true;
+ try{
+  if(!id){
+   if(!file){msg("Select an audio file.");return}
+   const path=`${u.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
+   let r=await sb.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type||"audio/mpeg"});if(r.error)throw r.error;
+   r=await sb.from(TABLE).insert({user_id:u.id,title,note,file_path:path,is_public:pub});if(r.error){await sb.storage.from(BUCKET).remove([path]);throw r.error}
+   msg("Audio uploaded successfully.");
+  }else{
+   let r=await sb.from(TABLE).select("*").eq("id",id).eq("user_id",u.id).single();if(r.error)throw r.error;const old=r.data;let path=old.file_path;
+   if(file){path=`${u.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;r=await sb.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type||"audio/mpeg"});if(r.error)throw r.error;await sb.storage.from(BUCKET).remove([old.file_path])}
+   r=await sb.from(TABLE).update({title,note,is_public:pub,file_path:path,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",u.id);if(r.error)throw r.error;msg("Audio updated successfully.")
+  }
+  closeModal();await loadAccount();await loadPublic();
+ }catch(e){console.error(e);msg(e.message||"Something went wrong.")}finally{$("saveAudio").disabled=false}
+};
+
+window.editUpload=async id=>{const u=await user();const r=await sb.from(TABLE).select("*").eq("id",id).eq("user_id",u.id).single();if(r.error)msg(r.error.message);else openModal(r.data)};
+window.toggleVisibility=async(id,current)=>{const u=await user();const r=await sb.from(TABLE).update({is_public:!current,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",u.id);if(r.error)msg(r.error.message);else{msg(`Audio is now ${!current?"public":"private"}.`);loadAccount();loadPublic()}};
+window.deleteUpload=async id=>{
+ const u=await user();let r=await sb.from(TABLE).select("*").eq("id",id).eq("user_id",u.id).single();if(r.error){msg(r.error.message);return}
+ if(!confirm(`Delete "${r.data.title}" permanently?`))return;
+ r=await sb.storage.from(BUCKET).remove([r.data.file_path]);if(r.error){msg(r.error.message);return}
+ r=await sb.from(TABLE).delete().eq("id",id).eq("user_id",u.id);if(r.error){msg(r.error.message);return}
+ msg("Audio deleted successfully.");loadAccount();loadPublic();
+};
+
+function page(id){["homePage","explorePage","downloadsPage","accountPage"].forEach(x=>$(x).classList.toggle("hidden",x!==id));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));if(id==="accountPage")loadAccount();if(id==="homePage"||id==="explorePage")loadPublic()}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>page(b.dataset.page));$("accountTop").onclick=()=>page("accountPage");
+$("search").oninput=e=>{let q=e.target.value.toLowerCase();document.querySelectorAll("#homeList .card,#discoverList .card").forEach(x=>x.style.display=x.innerText.toLowerCase().includes(q)?"":"none")};
+sb.auth.onAuthStateChange(()=>loadAccount());loadPublic();loadAccount();
+</script>
+</body>
+</html>
